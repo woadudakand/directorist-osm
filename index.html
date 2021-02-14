@@ -23,7 +23,7 @@
     <!-- add listing map start -->
     <h2>Add listing map</h2>
     <div id="sv-map">
-      <div id="addListingMap"></div>
+      <div  id="addListingMap"></div>
     </div>
     <div class='pointer'></div>
 
@@ -57,6 +57,7 @@
 
         var map = L.map('addListingMap', {    
             center: [initLat, initLng],
+            scrollWheelZoom: false,   
             zoom: 10
         });
   
@@ -142,6 +143,7 @@
       maxZoom: 19,
       tileSize: 512,
       zoomOffset: -1,
+      scrollWheelZoom: false,
       attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
     }).addTo(map);
 
@@ -194,6 +196,7 @@
       center: [10.0, 5.0],
       minZoom: 2,
       maxZoom: 19,
+      scrollWheelZoom: false,   
       zoom: 2,
       layers: [tiles]
     });

@@ -11,6 +11,7 @@ html {
     height: 100%;
     z-index:100;
     position: relative;
+    /* pointer-events: none; */
 }
 
 #mapSearchContainer{
@@ -48,4 +49,5 @@ footer {
 #singleListingMap, #allListingMap {
     height: 100%;
     width: 100vw;
+    /* pointer-events: none; */
 }
