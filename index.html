@@ -130,7 +130,13 @@
           long: 90.4003584
     }
     
-    var map = L.map('singleListingMap').setView([longLate.late, longLate.long], 19);
+    var map = L.map('singleListingMap', {
+      center: [longLate.late, longLate.long],
+      minZoom: 2,
+      maxZoom: 19,
+      scrollWheelZoom: false,   
+      zoom: 9
+    });
     const fontAwesomeIcon = L.divIcon({
         html: '<i class="fa fa-map-marker fa-3x"></i>',
         iconSize: [20, 20],
