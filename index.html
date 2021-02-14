@@ -3,16 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+
+    <!-- STYLES -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
-
     <link rel="stylesheet" href="./customStyle.css" />
-    
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
     <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
 
+    <!-- SCRIPTS -->
     <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
     <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
     <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
@@ -55,47 +55,47 @@
 
       function sovwareOsmMap(initLat, initLng) {
 
-        var map = L.map('addListingMap', {    
+        var map = L.map('addListingMap', {
             center: [initLat, initLng],
             scrollWheelZoom: false,   
             zoom: 10
         });
-  
+
         L.control.scale().addTo(map);
-        
+
         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           }).addTo(map);
-  
+
           var searchControl = new L.esri.Controls.Geosearch().addTo(map);
           var results = new L.LayerGroup().addTo(map);
-  
+
           var myMarker = L.marker([initLat, initLng], {title: "MyPoint", alt: "The Big I", draggable: true})
             .addTo(map)
             .on('dragend', function() {
-              var coord = String(myMarker.getLatLng()).split(',');            
+              var coord = String(myMarker.getLatLng()).split(',');
               var lat = coord[0].split('(');
               var lng = coord[1].split(')');
-  
+
               idLat.value = lat[1];
-              idLong.value = lng;            
+              idLong.value = lng;
               myMarker.bindPopup("Moved to: " + lat[1] + ", " + lng[0] + ".");
             });
-      
+
           searchControl.on('results', function(data){
             results.clearLayers();
-            for (var i = data.results.length - 1; i >= 0; i--) {           
+            for (var i = data.results.length - 1; i >= 0; i--) {
               idLat.value = data.results[i].latlng.lat;
               idLong.value = data.results[i].latlng.lng;
-  
+
               var myMarker = L.marker(data.results[i].latlng, {title: "MyPoint", alt: "The Big I", draggable: true})
               .addTo(map)
               .on('dragend', function() {
                 var coord = String(myMarker.getLatLng()).split(',');
-                var lat = coord[0].split('(');              
-                var lng = coord[1].split(')');              
+                var lat = coord[0].split('(');
+                var lng = coord[1].split(')');
                 idLat.value = lat[1];
-                idLong.value = lng; 
+                idLong.value = lng;
                 myMarker.bindPopup("Moved to: " + lat[1] + ", " + lng[0] + ".");
               });
               results.addLayer(myMarker);
@@ -111,13 +111,13 @@
           }
         }
 
-        function showPosition(position) { 
+        function showPosition(position) {
           document.getElementById('sv-map').innerHTML = "<div id='addListingMap'></div>";
           sovwareOsmMap(position.coords.latitude, position.coords.longitude)
           idLat.value = position.coords.latitude;
           idLong.value = position.coords.longitude;
         }
-      
+
       document.getElementById('currentLocation').addEventListener('click', function(){
         getLocation();
       });
@@ -192,7 +192,7 @@
         }
       ];
 
-    
+
     var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -206,8 +206,8 @@
       zoom: 2,
       layers: [tiles]
     });
-          
-    var markerClusters = L.markerClusterGroup(); 
+
+    var markerClusters = L.markerClusterGroup();
     for ( var i = 0; i < markers.length; ++i )
     {
       var popup = markers[i].name +
@@ -216,12 +216,12 @@
                   '<br/><b>ICAO:</b> ' + markers[i].icao +
                   '<br/><b>Altitude:</b> ' + Math.round( markers[i].alt * 0.3048 ) + ' m' +
                   '<br/><b>Timezone:</b> ' + markers[i].tz;
-    
+
       var m = L.marker( [markers[i].lat, markers[i].lng], {icon: fontAwesomeIcon} )
                       .bindPopup( popup );
-    
+
       markerClusters.addLayer( m );
-    }      
+    }
     map.addLayer( markerClusters );
   </script>
 
