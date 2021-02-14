@@ -6,61 +6,24 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+
+    <link rel="stylesheet" href="./customStyle.css" />
     
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+
     <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
     <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
     <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+    <script type='text/javascript' src='http://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js'></script>
 
-    <style>
-      body,
-      html {
-        height: 100%;
-        font-family:Arial;
-      }
-        
-      #map, #sv-map {
-        width: 100%;
-        height: 100%;
-        z-index:100;
-      }
-
-      #mapSearchContainer{
-        position:fixed;
-        top:20px;
-        right: 40px;
-        height:30px;
-        width:180px;
-        z-index:110;
-        font-size:10pt;
-        color:#5d5d5d;
-        border:solid 1px #bbb;
-        background-color:#f8f8f8;
-      }
-
-      .pointer{
-        position:absolute;
-        top:86px;
-        left:60px;
-        z-index:99999;
-      }
-
-      footer {
-        position: fixed;
-        bottom: 20px;
-        left: 50px;
-        z-index: 999;
-        background-color: #00000050;
-        padding: 6px;
-        border-radius: 5px;
-      }
-
-    </style>
   </head>
   <body>
+    <!-- add listing map start -->
+    <h2>Add listing map</h2>
     <div id="sv-map">
-      <div id="map"></div>
+      <div id="addListingMap"></div>
     </div>
     <div class='pointer'></div>
 
@@ -69,8 +32,18 @@
       <input name="long" id="long" placeholder="Longitude" />
       <button type="button" id="currentLocation">Location</button>
     </footer>
+  <!-- add listing map end -->
 
-    <script>
+  <!-- single Listing map -->
+  <h2>Single listing map</h2>
+  <div id="singleListingMap"></div>
+
+  <!-- all Listing map -->
+  <h2>All listing map</h2>
+  <div id="allListingMap"></div>
+
+  <script>
+    // add listing map start here
       var globalLat = 35.10418;
       var globalLong = -106.6287;
 
@@ -82,7 +55,7 @@
 
       function sovwareOsmMap(initLat, initLng) {
 
-        var map = L.map('map', {    
+        var map = L.map('addListingMap', {    
             center: [initLat, initLng],
             zoom: 10
         });
@@ -131,7 +104,6 @@
 
       sovwareOsmMap(globalLat, globalLong);
 
-
         function getLocation() {
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
@@ -139,7 +111,7 @@
         }
 
         function showPosition(position) { 
-          document.getElementById('sv-map').innerHTML = "<div id='map'></div>";
+          document.getElementById('sv-map').innerHTML = "<div id='addListingMap'></div>";
           sovwareOsmMap(position.coords.latitude, position.coords.longitude)
           idLat.value = position.coords.latitude;
           idLong.value = position.coords.longitude;
@@ -148,7 +120,101 @@
       document.getElementById('currentLocation').addEventListener('click', function(){
         getLocation();
       });
+  // add listing map close here
+  </script>
+  <script>
+    // single listing map
+    var longLate ={
+          late: 23.7535,
+          long: 90.4003584
+    }
+    
+    var map = L.map('singleListingMap').setView([longLate.late, longLate.long], 19);
+    const fontAwesomeIcon = L.divIcon({
+        html: '<i class="fa fa-map-marker fa-3x"></i>',
+        iconSize: [20, 20],
+        iconAnchor:   [10, 36],
+        popupAnchor:  [0, -20],
+        className: 'myDivIcon'
+    });
+    // add the OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    }).addTo(map);
 
-    </script>
+    // show the scale bar on the lower left corner
+    L.control.scale().addTo(map);
+
+    // show a marker on the map
+    L.marker({lon: longLate.long, lat: longLate.late}, { icon:  fontAwesomeIcon}).bindPopup('A pretty CSS3 popup.<br> Easily customizable.').addTo(map).openPopup();
+  </script>
+
+  <script>
+    // All listing
+    var markers = [
+        {
+          "name":"Goroka",
+          "city":"Goroka, Papua New Guinea",
+          "iata_faa":"GKA",
+          "icao":"AYGA",
+          "lat":-6.081689,
+          "lng":145.391881,
+          "alt":5282,
+          "tz":"Pacific/Port_Moresby"
+        },{
+          "name":"Madang",
+          "city":"Madang, Papua New Guinea",
+          "iata_faa":"MAG",
+          "icao":"AYMD",
+          "lat":-5.207083,
+          "lng":145.7887,
+          "alt":20,
+          "tz":"Pacific/Port_Moresby"
+        },{
+          "name":"San Diego Old Town Transit Center",
+          "city":"San Diego, United States",
+          "iata_faa":"OLT",
+          "lat":32.7552,
+          "lng":-117.1995,
+          "alt":0,
+          "tz":"America/Los_Angeles"
+        }
+      ];
+
+    
+    var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    var map = L.map( 'allListingMap', {
+      center: [10.0, 5.0],
+      minZoom: 2,
+      maxZoom: 19,
+      zoom: 2,
+      layers: [tiles]
+    });
+          
+    var markerClusters = L.markerClusterGroup(); 
+    for ( var i = 0; i < markers.length; ++i )
+    {
+      var popup = markers[i].name +
+                  '<br/>' + markers[i].city +
+                  '<br/><b>IATA/FAA:</b> ' + markers[i].iata_faa +
+                  '<br/><b>ICAO:</b> ' + markers[i].icao +
+                  '<br/><b>Altitude:</b> ' + Math.round( markers[i].alt * 0.3048 ) + ' m' +
+                  '<br/><b>Timezone:</b> ' + markers[i].tz;
+    
+      var m = L.marker( [markers[i].lat, markers[i].lng], {icon: fontAwesomeIcon} )
+                      .bindPopup( popup );
+    
+      markerClusters.addLayer( m );
+    }      
+    map.addLayer( markerClusters );
+  </script>
+
   </body>
 </html>
